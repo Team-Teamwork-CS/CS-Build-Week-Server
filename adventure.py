@@ -68,7 +68,8 @@ def login():
         if user.password_hash == password_hash:
             # return auth key and username
             player_key = world.get_player_by_auth(user)
-            return {'key': player_key, 'username': username}
+            response =  {'key': player_key, 'username': username}
+            return jsonify(response),200
         else:
             response = {'message': "Incorrect password"}
             return jsonify(response), 400
