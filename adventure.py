@@ -133,7 +133,7 @@ def sell_item():
 def rooms():
     rooms = []
     for room in world._rooms:
-        room_dict = room.__dict__
+        room_dict = dict(room.__dict__)
         room_dict['n_to'] = room.n_to.id if room.n_to is not None else ""
         room_dict['e_to'] = room.e_to.id if room.e_to is not None else ""
         room_dict['s_to'] = room.s_to.id if room.s_to is not None else ""
