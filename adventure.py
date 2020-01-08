@@ -2,6 +2,7 @@ import hashlib
 import json
 from time import time
 from uuid import uuid4
+import bcrypt
 
 from flask import Flask, jsonify, request, render_template
 from pusher import Pusher
@@ -50,12 +51,30 @@ def register():
     else:
         return jsonify(response), 200
 
+
 @app.route('/api/login/', methods=['POST'])
 def login():
-    # IMPLEMENT THIS
-    response = {'error': "Not implemented"}
-    return jsonify(response), 400
+    params = request.get_json()
+    required = ['username', 'password']
+    if not all(x in params for x in required):
+        response = {'message': "Missing username or password"}
+        return jsonify(response), 400
 
+    username = params.get('username')
+    password = params.get('password')
+    user = world.get_player_by_username(username)
+    if user is not None:
+        password_hash = bcrypt.hashpw(password.encode(), world.password_salt)
+        if user.password_hash == password_hash:
+            # return auth key and username
+            player_key = world.get_player_by_auth(user)
+            return {'key': player_key, 'username': username}
+        else:
+            response = {'message': "Incorrect password"}
+            return jsonify(response), 400
+    else:
+        response = {'message': "Username incorrect or unregistered"}
+        return jsonify(response), 400
 
 @app.route('/api/adv/init/', methods=['GET'])
 def init():
