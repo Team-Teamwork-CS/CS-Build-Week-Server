@@ -8,6 +8,7 @@ class World:
     def __init__(self):
         self.starting_room = None
         self.rooms = {}
+        self._rooms = []
         self.players = {}
         self.create_world()
         self.password_salt = bcrypt.gensalt()
