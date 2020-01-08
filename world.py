@@ -48,34 +48,55 @@ class World:
         return None
 
     def create_world(self):
-        # UPDATE THIS:
-        # Should create 100 procuedurally generated rooms
-        self.rooms = {
-            'outside':  Room("Outside Cave Entrance",
-                             "North of you, the cave mount beckons", 1, 1, 1),
+        # Generate 100 rooms in a 10x10 grid style
+        # generate them first, then connect them all together
+        num_rooms = 100
+        rows = 10
+        columns = 10
+        names = ["Grass", "Rock", "Bush"]
+        descriptions = ["Grass", "Rock", "Bush"]
+        id = 0
+        x = 0
+        y = 0
 
-            'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
-        passages run north and east.""", 2, 1, 2),
+        rooms = []
+        for col in range(columns):
+            for row in range(rows):
+                name = random.choice(names)
+                description = name  # random.choice(descriptions)
+                x = col
+                y = row
+                room = Room(name, description, id, x, y)
+                self.rooms[id] = room
+                self._rooms.append(room)
+                id += 1
+                rooms.append(room)
 
-            'overlook': Room("Grand Overlook", """A steep cliff appears before you, falling
-        into the darkness. Ahead to the north, a light flickers in
-        the distance, but there is no way across the chasm.""", 3, 1, 3),
+        print(rooms)
+        self.starting_room = self.rooms[0]
+        # connect all the rooms in grid style
+        id = 0
+        for col in range(columns):
+            for row in range(rows):
+                print('x')
+                room = self.rooms[id]
+                if row - 1 > 0:
+                    room_n = self.rooms[col + (row - 1) * 10]
+                    room.n_to = room_n
+                if col + 1 < 10:
+                    room_e = self.rooms[col + 1 + row * 10]
+                    room.e_to = room_e
+                if row + 1 < 10:
+                    room_s = self.rooms[col + (row + 1) * 10]
+                    room.s_to = room_s
+                if col - 1 > 0:
+                    room_w = self.rooms[col - 1 + row * 10]
+                    room.w_to = room_w
+                id += 1
 
-            'narrow':   Room("Narrow Passage", """The narrow passage bends here from west
-        to north. The smell of gold permeates the air.""", 4, 2, 2),
 
-            'treasure': Room("Treasure Chamber", """You've found the long-lost treasure
-        chamber! Sadly, it has already been completely emptied by
-        earlier adventurers. The only exit is to the south.""", 5, 2, 3),
-        }
 
-        # Link rooms together
-        self.rooms['outside'].connect_rooms('n', self.rooms['foyer'])
-        self.rooms['foyer'].connect_rooms('n', self.rooms['overlook'])
-        self.rooms['foyer'].connect_rooms('e', self.rooms['narrow'])
-        self.rooms['narrow'].connect_rooms('n', self.rooms['treasure'])
 
-        self.starting_room = self.rooms['outside']
 
 
 

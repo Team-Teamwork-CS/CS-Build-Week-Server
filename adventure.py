@@ -131,9 +131,17 @@ def sell_item():
 
 @app.route('/api/adv/rooms/', methods=['GET'])
 def rooms():
-    # IMPLEMENT THIS
-    response = {'error': "Not implemented"}
-    return jsonify(response), 400
+    rooms = []
+    for room in world._rooms:
+        room_dict = room.__dict__
+        room_dict['n_to'] = room.n_to.id if room.n_to is not None else ""
+        room_dict['e_to'] = room.e_to.id if room.e_to is not None else ""
+        room_dict['s_to'] = room.s_to.id if room.s_to is not None else ""
+        room_dict['w_to'] = room.w_to.id if room.w_to is not None else ""
+        rooms.append(json.dumps(room_dict))
+
+    response = {'rooms': rooms}
+    return jsonify(response), 200
 
 
 # Run the program on port 5000
