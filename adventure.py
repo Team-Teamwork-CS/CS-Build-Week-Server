@@ -113,7 +113,7 @@ def move():
         response = {
             'title': player.current_room.name,
             'description': player.current_room.description,
-            'id': Room.id
+            'id':player.current_room.id
         }
         return jsonify(response), 200
     else:
