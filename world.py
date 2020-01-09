@@ -60,8 +60,14 @@ class World:
         num_rooms = 100
         rows = 10
         columns = 10
-        names = ["Grass", "Rock", "Bush"]
-        descriptions = ["Grass", "Rock", "Bush"]
+        names = ["The Grasslands",
+                 "The Rough",
+                 "Bush"]
+        descriptions = ["The tall grass makes it difficult to see whats hiding. Be careful!",
+                        "Terrain looks rough. Going to be tough to travel through here with bare feet.",
+                        "Bush"]
+        damage = []
+
         id = 0
         x = 0
         y = 0
