@@ -89,6 +89,7 @@ def init():
     response = {
         'title': player.current_room.name,
         'description': player.current_room.description,
+        'id': player.current_room.id
     }
     return jsonify(response), 200
 
