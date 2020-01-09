@@ -83,11 +83,10 @@ class World:
         self.starting_room = self.rooms[0]
         # connect all the rooms in grid style
         id = 0
-        for col in range(columns):
-            for row in range(rows):
-                print('x')
+        for row in range(rows):
+            for col in range(columns):
                 room = self.rooms[id]
-                if row - 1 > 0:
+                if row - 1 >= 0:
                     room_n = self.rooms[col + (row - 1) * 10]
                     room.n_to = room_n
                 if col + 1 < 10:
@@ -96,9 +95,15 @@ class World:
                 if row + 1 < 10:
                     room_s = self.rooms[col + (row + 1) * 10]
                     room.s_to = room_s
-                if col - 1 > 0:
+                if col - 1 >= 0:
                     room_w = self.rooms[col - 1 + row * 10]
                     room.w_to = room_w
+                print(room.id, room.x, room.y,
+                      room.n_to.id if room.n_to is not None else None,
+                      room.e_to.id if room.e_to is not None else None,
+                      room.s_to.id if room.s_to is not None else None,
+                      room.w_to.id if room.w_to is not None else None
+                      )
                 id += 1
 
 
