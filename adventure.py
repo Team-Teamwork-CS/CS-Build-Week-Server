@@ -5,6 +5,7 @@ from uuid import uuid4
 import bcrypt
 
 from flask import Flask, jsonify, request, render_template
+from flask_cors import CORS
 from pusher import Pusher
 from decouple import config
 
@@ -19,6 +20,7 @@ world = World()
 
 app = Flask(__name__)
 
+CORS(app)
 
 def get_player_by_header(world, auth_header):
     if auth_header is None:
