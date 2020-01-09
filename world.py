@@ -1,5 +1,6 @@
 from room import Room
 from player import Player
+from terrain import terrains
 import random
 import math
 import bcrypt
@@ -60,8 +61,6 @@ class World:
         num_rooms = 100
         rows = 10
         columns = 10
-        names = ["Grass", "Rock", "Bush"]
-        descriptions = ["Grass", "Rock", "Bush"]
         id = 0
         x = 0
         y = 0
@@ -69,8 +68,9 @@ class World:
         rooms = []
         for col in range(columns):
             for row in range(rows):
-                name = random.choice(names)
-                description = name  # random.choice(descriptions)
+                terrain = random.choice(terrains)
+                name = terrain.name
+                description = terrain.description
                 x = col
                 y = row
                 room = Room(name, description, id, x, y)
