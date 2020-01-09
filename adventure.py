@@ -67,8 +67,8 @@ def login():
         password_hash = bcrypt.hashpw(password.encode(), world.password_salt)
         if user.password_hash == password_hash:
             # return auth key and username
-            player_key = world.get_player_by_auth(user)
-            response =  {'key': player_key, 'username': username}
+            player_key = world.get_auth_by_username(username)
+            response = {'key': player_key}
             return jsonify(response),200
         else:
             response = {'message': "Incorrect password"}
@@ -166,4 +166,4 @@ def rooms():
 
 # Run the program on port 5000
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run()

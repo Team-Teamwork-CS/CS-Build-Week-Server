@@ -32,6 +32,12 @@ class World:
             return self.players[auth_key]
         else:
             return None
+    
+    def get_auth_by_username(self, username):
+        for player in self.players:
+            if self.players[player].username == username:
+                return player
+        return None
 
     def get_player_by_username(self, username):
         for auth_key in self.players:
