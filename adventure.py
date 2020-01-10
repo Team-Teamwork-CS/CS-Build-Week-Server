@@ -14,7 +14,12 @@ from player import Player
 from world import World
 
 # Look up decouple for config variables
-# pusher = Pusher(app_id=config('PUSHER_APP_ID'), key=config('PUSHER_KEY'), secret=config('PUSHER_SECRET'), cluster=config('PUSHER_CLUSTER'))
+pusher = Pusher(
+    app_id=config('PUSHER_APP_ID'),
+    key=config('PUSHER_KEY'),
+    secret=config('PUSHER_SECRET'),
+    cluster=config('PUSHER_CLUSTER')
+    )
 
 world = World()
 
@@ -51,6 +56,9 @@ def register():
     if 'error' in response:
         return jsonify(response), 500
     else:
+        pusher.trigger(
+            u'world', u'joined',
+            {'global': "{} Has joined the game".format(username)})
         return jsonify(response), 200
 
 
@@ -71,7 +79,11 @@ def login():
             # return auth key and username
             player_key = world.get_auth_by_username(username)
             response = {'key': player_key}
-            return jsonify(response),200
+            pusher.trigger(
+                u'world', u'joined',
+                {'global': "{} Has joined the game".format(username)}
+                )
+            return jsonify(response), 200
         else:
             response = {'message': "Incorrect password"}
             return jsonify(response), 400
@@ -166,7 +178,6 @@ def rooms():
 
     response = {'rooms': rooms}
     return jsonify(response), 200
-
 
 # Run the program on port 5000
 if __name__ == '__main__':
