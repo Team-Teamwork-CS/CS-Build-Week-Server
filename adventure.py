@@ -14,18 +14,19 @@ from player import Player
 from world import World
 
 # Look up decouple for config variables
-# pusher = Pusher(
-#     app_id=config('PUSHER_APP_ID'),
-#     key=config('PUSHER_KEY'),
-#     secret=config('PUSHER_SECRET'),
-#     cluster=config('PUSHER_CLUSTER')
-#     )
+pusher = Pusher(
+    app_id=config('PUSHER_APP_ID'),
+    key=config('PUSHER_KEY'),
+    secret=config('PUSHER_SECRET'),
+    cluster=config('PUSHER_CLUSTER')
+    )
 
 world = World()
 
 app = Flask(__name__)
 
 CORS(app)
+
 
 def get_player_by_header(world, auth_header):
     if auth_header is None:
@@ -56,9 +57,9 @@ def register():
     if 'error' in response:
         return jsonify(response), 500
     else:
-        # pusher.trigger(
-        #     u'world', u'joined',
-        #     {'global': "{} Has joined the game".format(username)})
+        pusher.trigger(
+            u'world', u'joined',
+            {'global': "{} Has joined the game".format(username)})
         return jsonify(response), 200
 
 
@@ -79,10 +80,10 @@ def login():
             # return auth key and username
             player_key = world.get_auth_by_username(username)
             response = {'key': player_key}
-            # pusher.trigger(
-            #     u'world', u'joined',
-            #     {'global': "{} Has joined the game".format(username)}
-            #     )
+            pusher.trigger(
+                u'world', u'joined',
+                {'global': "{} Has joined the game".format(username)}
+                )
             return jsonify(response), 200
         else:
             response = {'message': "Incorrect password"}
@@ -90,6 +91,7 @@ def login():
     else:
         response = {'message': "Username incorrect or unregistered"}
         return jsonify(response), 400
+
 
 @app.route('/api/adv/init/', methods=['GET'])
 def init():
@@ -125,7 +127,7 @@ def move():
         response = {
             'title': player.current_room.name,
             'description': player.current_room.description,
-            'id':player.current_room.id
+            'id': player.current_room.id
         }
         return jsonify(response), 200
     else:
@@ -141,11 +143,13 @@ def take_item():
     response = {'error': "Not implemented"}
     return jsonify(response), 400
 
+
 @app.route('/api/adv/drop/', methods=['POST'])
 def drop_item():
     # IMPLEMENT THIS
     response = {'error': "Not implemented"}
     return jsonify(response), 400
+
 
 @app.route('/api/adv/inventory/', methods=['GET'])
 def inventory():
@@ -153,17 +157,20 @@ def inventory():
     response = {'error': "Not implemented"}
     return jsonify(response), 400
 
+
 @app.route('/api/adv/buy/', methods=['POST'])
 def buy_item():
     # IMPLEMENT THIS
     response = {'error': "Not implemented"}
     return jsonify(response), 400
 
+
 @app.route('/api/adv/sell/', methods=['POST'])
 def sell_item():
     # IMPLEMENT THIS
     response = {'error': "Not implemented"}
     return jsonify(response), 400
+
 
 @app.route('/api/adv/rooms/', methods=['GET'])
 def rooms():
@@ -178,6 +185,7 @@ def rooms():
 
     response = {'rooms': rooms}
     return jsonify(response), 200
+
 
 # Run the program on port 5000
 if __name__ == '__main__':
